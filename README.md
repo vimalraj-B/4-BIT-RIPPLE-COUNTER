@@ -37,20 +37,41 @@ In timing diagram Q0 is changing as soon as the negative edge of clock pulse is 
 **PROGRAM**
 
 ```
-module ex12(out,clk,rst);
-input clk,rst;
-output reg [3:0]out;
-always @ (posedge clk)
-begin
-   if(rst)
-     out<=0;
-   else 
-     out <= out-1;
-end
+module ripple (
+    input clk,     // Clock input
+    input reset,   // Reset input (active high)
+    output [3:0] q // 4-bit output
+);
+    // Internal signals for flip-flops
+    reg [3:0] q_int;
+
+    // Assign internal register to output
+    assign q = q_int;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) 
+            q_int[0] <= 1'b0; // Reset the first bit to 0
+        else 
+            q_int[0] <= ~q_int[0]; // Toggle the first bit on clock edge
+    end
+
+    // Generate the other flip-flops based on the output of the previous one
+    genvar i;
+    generate
+        for (i = 1; i < 4; i = i + 1) begin : ripple
+            always @(posedge q_int[i-1] or posedge reset) begin
+                if (reset) 
+                    q_int[i] <= 1'b0; // Reset the bit to 0
+                else 
+                    q_int[i] <= ~q_int[i]; // Toggle the bit on clock edge of previous stage
+            end
+        end
+    endgenerate
 endmodule
 
 ```
-![EXP  12](https://github.com/user-attachments/assets/0a2af201-d487-4099-bd43-acecbd827738)
+![Screenshot 2024-12-17 131835](https://github.com/user-attachments/assets/7a6dc967-7369-4578-a689-62fbb0054c8b)
+
 
 ```
 
@@ -62,12 +83,12 @@ endmodule
 
 **RTL LOGIC FOR 4 Bit Ripple Counter**
 
-![EXP 12](https://github.com/user-attachments/assets/6c87e507-495e-4ed7-91c0-c13c2642956b)
+![Screenshot 2024-12-17 131610](https://github.com/user-attachments/assets/7ef15f98-1968-4088-899e-b61ad0ae9d12)
 
 
 **TIMING DIGRAMS FOR 4 Bit Ripple Counter**
 
-![EXP 12 (2)](https://github.com/user-attachments/assets/425d6218-06e3-41b6-9c76-895b64d7e2c6)
+![Screenshot 2024-12-17 131736](https://github.com/user-attachments/assets/bd76ba0d-5f50-4bcf-8e70-38b7b5f05d64)
 
 
 
