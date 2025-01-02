@@ -83,7 +83,8 @@ endmodule
 
 **RTL LOGIC FOR 4 Bit Ripple Counter**
 
-![Screenshot 2024-12-17 131610](https://github.com/user-attachments/assets/7ef15f98-1968-4088-899e-b61ad0ae9d12)
+
+![Uploading Screenshot 2025-01-02 203725.png…]()
 
 
 **TIMING DIGRAMS FOR 4 Bit Ripple Counter**
